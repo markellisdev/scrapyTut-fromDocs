@@ -1,0 +1,1 @@
+# Following Scrapy docs tutorial so that I can replace Beautiful Soup in another project
