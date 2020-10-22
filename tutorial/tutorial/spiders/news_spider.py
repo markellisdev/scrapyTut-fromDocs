@@ -17,5 +17,7 @@ class FinNewsSpider(scrapy.Spider):
     def parse(self, response):
         paragraphs = response.xpath('//div[@class="article-content-body-only"]/p/text()').extract()
         print(paragraphs)
-        for p in paragraphs:
-            yield TutorialItem(content=p)
+        yield TutorialItem(content=paragraphs)
+        ##### If I want to break up each p in a dict
+        # for p in paragraphs:
+        #     yield TutorialItem(content=p)
