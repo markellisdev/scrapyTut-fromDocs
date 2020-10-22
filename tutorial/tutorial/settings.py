@@ -11,6 +11,7 @@ BOT_NAME = 'tutorial'
 
 SPIDER_MODULES = ['tutorial.spiders']
 NEWSPIDER_MODULE = 'tutorial.spiders'
+DEFAULT_ITEM_CLASS = 'tutorial.items.TutorialItem'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
