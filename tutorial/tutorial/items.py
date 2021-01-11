@@ -4,7 +4,7 @@
 # https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-# from scrapy.item import Item, Field
+from scrapy.item import Item, Field
 
 
 class TutorialItem(scrapy.Item):
@@ -12,3 +12,12 @@ class TutorialItem(scrapy.Item):
     # name = scrapy.Field()
     content = scrapy.Field()
     # pass
+
+class QuoteItem(scrapy.Item):
+    quote_content = Field()
+    tags = Field()
+    author_name = Field()
+    author_birthday = Field()
+    author_bornlocation = Field()
+    author_bio = Field()
+    

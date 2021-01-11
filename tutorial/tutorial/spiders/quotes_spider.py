@@ -1,5 +1,8 @@
+from typing import Text
 import scrapy
 from scrapy.exporters import JsonLinesItemExporter
+from scrapy.loader import ItemLoader
+from tutorial.items import QuoteItem
 
 class QuotesSpider(scrapy.Spider):
     name = "quotes"
@@ -28,11 +31,16 @@ class QuotesSpider(scrapy.Spider):
     def parse(self, response):
         quotes = response.css("div.quote")
         for quote in quotes:
-            yield {
-                'text': quote.css("span.text::text").get(),
-                'author': quote.css("small.author::text").get(),
-                'tags': quote.css("div.tags a.tag::text").getall()
-            }
+            # yield {
+            #     'text': quote.css("span.text::text").get(),
+            #     'author': quote.css("small.author::text").get(),
+            #     'tags': quote.css("div.tags a.tag::text").getall()
+            # }
+            # replaced the above with this item loader
+            loader = ItemLoader(item=QuoteItem(), selector=quote)
+            loader.add_css('quote_content', '.text::text')
+            loader.add_css('tags', '.tag::text')
+            quote_item = loader.load_item() # end of item loader
 
             author_url = quote.css('.author + a::attr(href)').get()
             self.logger.info('get author page url')
@@ -48,7 +56,7 @@ class QuotesSpider(scrapy.Spider):
         for a in response.css('li.next a'):
             yield response.follow(a, callback=self.parse)
     
-    def parse(self, response):
+    def parse_author(self, response):
         yield {
             'author_name': response.css('.author-title::text').get(),
             'author_birthday': response.css('.author-born-date::text').get(),
