@@ -29,6 +29,7 @@ class QuotesSpider(scrapy.Spider):
 
 #### Parse to actually gather targeted info
     def parse(self, response):
+        self.logger.info('Parse function called on {}'.format(response.url))
         quotes = response.css("div.quote")
         for quote in quotes:
             # yield {
@@ -45,7 +46,7 @@ class QuotesSpider(scrapy.Spider):
             author_url = quote.css('.author + a::attr(href)').get()
             self.logger.info('get author page url')
             # go to the author page
-            yield response.follow(author_url, callback=self.parse_author)
+            yield response.follow(author_url, callback=self.parse_author, meta={'quote_item': quote_item})
 
         # next_page = response.css("li.next a::attr(href)").get()
         # if next_page is not None:
@@ -58,6 +59,7 @@ class QuotesSpider(scrapy.Spider):
     
     def parse_author(self, response):
         yield {
+            'quote_item': response.meta['quote_item'],
             'author_name': response.css('.author-title::text').get(),
             'author_birthday': response.css('.author-born-date::text').get(),
             'author_bornlocation': response.css('.author-born-location::text').get(),
