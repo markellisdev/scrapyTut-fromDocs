@@ -1,5 +1,6 @@
 from typing import Text
 import scrapy
+from scrapy import loader
 from scrapy.exporters import JsonLinesItemExporter
 from scrapy.loader import ItemLoader
 from tutorial.items import QuoteItem
@@ -58,10 +59,17 @@ class QuotesSpider(scrapy.Spider):
             yield response.follow(a, callback=self.parse)
     
     def parse_author(self, response):
-        yield {
-            'quote_item': response.meta['quote_item'],
-            'author_name': response.css('.author-title::text').get(),
-            'author_birthday': response.css('.author-born-date::text').get(),
-            'author_bornlocation': response.css('.author-born-location::text').get(),
-            'author_bio': response.css('.author-description::text').get()
-        }
+        quote_item = response.meta['quote_item']
+        loader = ItemLoader(item=quote_item, response=response)
+        loader.add_css('author_name', '.author-title::text')
+        loader.add_css('author_birthday', '.author-born-date::text')
+        loader.add_css('author_bornlocation', '.author-born-location::text')
+        loader.add_css('author_bio', '.author-description::text')
+        yield loader.load_item()
+        # yield {
+        #     'quote_item': response.meta['quote_item'],
+        #     'author_name': response.css('.author-title::text').get(),
+        #     'author_birthday': response.css('.author-born-date::text').get(),
+        #     'author_bornlocation': response.css('.author-born-location::text').get(),
+        #     'author_bio': response.css('.author-description::text').get()
+        # }

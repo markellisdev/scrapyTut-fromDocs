@@ -17,6 +17,11 @@ def convert_date(text):
     # convert date string to Python date
     return datetime.strptime(text, '%B %d, %Y')
 
+def parse_location(text):
+    # parse location "in Ulm, Germany"
+    # this removes "in" by slicing and keeping everything from 3rd charcter on [3:]. Can further parse city, state, country if desired
+    return text[3:]
+
 
 class TutorialItem(scrapy.Item):
     # define the fields for your item here like:
@@ -36,5 +41,8 @@ class QuoteItem(scrapy.Item):
         input_processor=MapCompose(convert_date),
         output_processor=TakeFirst()
     )
-    author_bornlocation = Field()
+    author_bornlocation = Field(
+        input_processor=MapCompose(parse_location),
+        output_processor=TakeFirst()
+    )
     author_bio = Field()
