@@ -5,7 +5,8 @@
 
 import scrapy
 from scrapy.item import Item, Field
-from scrapy.loader.processors import MapCompose, TakeFirst
+# from scrapy.loader.processors import MapCompose, TakeFirst --- since tutorial, these had been deprecated
+from itemloaders.processors import MapCompose, TakeFirst
 from datetime import datetime
 
 def remove_quotes(text):
@@ -26,7 +27,8 @@ def parse_location(text):
 class TutorialItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    content = scrapy.Field()
+    content = Field()
+    link = Field()
     # pass
 
 class QuoteItem(scrapy.Item):
