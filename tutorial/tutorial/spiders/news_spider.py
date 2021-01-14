@@ -1,5 +1,7 @@
 import scrapy
+from scrapy import loader
 from scrapy.exporters import JsonLinesItemExporter
+from scrapy.loader import ItemLoader
 from tutorial.items import TutorialItem
 
 # Scrapy Spider
@@ -27,8 +29,12 @@ class FinNewsSpider(scrapy.Spider):
         for headline in headlines:
             print(headline.css("a::attr('href')").get())
             # yield {
-            #     'link': headline.css("a::attr('href')").getall()
+            #     'link': headline.css("a::attr('href')").get()
             # }
+            loader = ItemLoader(item=TutorialItem(), selector=headline)
+            loader.add_css('link', "a::attr('href')")
+            headline_item = loader.load_item()
+            yield headline_item
             #     'text': quote.css("span.text::text").get(),
             #     'author': quote.css("small.author::text").get(),
             #     'tags': quote.css("div.tags a.tag::text").getall()

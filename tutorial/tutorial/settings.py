@@ -68,6 +68,7 @@ ROBOTSTXT_OBEY = True
 #}
 ITEM_PIPELINES = {
     'tutorial.pipelines.JsonPipeline': 300,
+    'tutorial.pipelines.TutorialPipeline': 400
 }
 # ITEM_PIPELINES = {'scrapy.pipelines.images.ImagesPipeline': 1}
 # IMAGES_STORE = 'C:/images/scrapy'
